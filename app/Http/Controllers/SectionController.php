@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class SectionController extends Controller
 {
-    /**
-     * List all sections
-     * GET /api/sections
-     */
     public function index()
     {
         $sections = DB::table('sections')
@@ -26,10 +22,6 @@ class SectionController extends Controller
         ], 200);
     }
 
-    /**
-     * Create a new section
-     * POST /api/sections
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -55,10 +47,6 @@ class SectionController extends Controller
         ], 201);
     }
 
-    /**
-     * View specific section
-     * GET /api/sections/{id}
-     */
     public function show($id)
     {
         $section = DB::table('sections')
@@ -78,10 +66,6 @@ class SectionController extends Controller
         ], 200);
     }
 
-    /**
-     * Update section
-     * PUT /api/sections/{id}
-     */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -107,10 +91,6 @@ class SectionController extends Controller
         ], 200);
     }
 
-    /**
-     * Delete section
-     * DELETE /api/sections/{id}
-     */
     public function destroy($id)
     {
         $affected = DB::table('sections')->where('id', $id)->delete();

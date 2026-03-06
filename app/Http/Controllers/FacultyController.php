@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class FacultyController extends Controller
 {
-    /**
-     * List all faculty
-     * GET /api/faculty
-     */
     public function index()
     {
         $faculty = DB::table('faculty')->get();
@@ -23,10 +19,6 @@ class FacultyController extends Controller
         ], 200);
     }
 
-    /**
-     * Create faculty
-     * POST /api/faculty
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -54,10 +46,6 @@ class FacultyController extends Controller
         ], 201);
     }
 
-    /**
-     * View section assignment details
-     * GET /api/sections/{id}/faculty
-     */
     public function getSectionFaculty($id)
     {
         $section = DB::table('sections')
@@ -77,10 +65,6 @@ class FacultyController extends Controller
         ], 200);
     }
 
-    /**
-     * Assign faculty to a section
-     * POST /api/sections/{id}/assign-faculty
-     */
     public function assignToSection(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -105,10 +89,6 @@ class FacultyController extends Controller
         ], 200);
     }
 
-    /**
-     * View class list of students in that section
-     * GET /api/sections/{id}/classlist
-     */
     public function getClasslist($id)
     {
         $section = DB::table('sections')->where('id', $id)->first();
@@ -129,10 +109,6 @@ class FacultyController extends Controller
         ], 200);
     }
 
-    /**
-     * View all grades
-     * GET /api/grades
-     */
     public function indexGrades()
     {
         $grades = DB::table('grades')
@@ -147,10 +123,6 @@ class FacultyController extends Controller
         ], 200);
     }
 
-    /**
-     * Upload student grades
-     * POST /api/grades
-     */
     public function uploadGrade(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -178,10 +150,6 @@ class FacultyController extends Controller
         ], 201);
     }
 
-    /**
-     * View grades of a student
-     * GET /api/grades/{studentId}
-     */
     public function getStudentGrades($studentId)
     {
         $student = DB::table('students')->where('id', $studentId)->first();
@@ -202,10 +170,6 @@ class FacultyController extends Controller
         ], 200);
     }
 
-    /**
-     * Record student attendance
-     * POST /api/attendance
-     */
     public function recordAttendance(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -233,10 +197,6 @@ class FacultyController extends Controller
         ], 201);
     }
 
-    /**
-     * View attendance of a student
-     * GET /api/attendance/{studentId}
-     */
     public function getAttendance($studentId)
     {
         $student = DB::table('students')->where('id', $studentId)->first();

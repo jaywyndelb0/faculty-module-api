@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
-    /**
-     * List all students
-     * GET /api/students
-     */
     public function index()
     {
         $students = DB::table('students')
@@ -26,10 +22,6 @@ class StudentController extends Controller
         ], 200);
     }
 
-    /**
-     * Create a new student
-     * POST /api/students
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -55,10 +47,6 @@ class StudentController extends Controller
         ], 201);
     }
 
-    /**
-     * View specific student
-     * GET /api/students/{id}
-     */
     public function show($id)
     {
         $student = DB::table('students')
@@ -78,10 +66,6 @@ class StudentController extends Controller
         ], 200);
     }
 
-    /**
-     * Update student
-     * PUT /api/students/{id}
-     */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -107,10 +91,6 @@ class StudentController extends Controller
         ], 200);
     }
 
-    /**
-     * Delete student
-     * DELETE /api/students/{id}
-     */
     public function destroy($id)
     {
         $affected = DB::table('students')->where('id', $id)->delete();

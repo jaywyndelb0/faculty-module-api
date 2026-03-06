@@ -34,7 +34,6 @@
         Not Logged In (Protected routes will fail)
     </div>
 
-    <!-- Auth Section -->
     <div class="card" style="border-left-color: #6f42c1;">
         <h2 style="color: #6f42c1;">Staff Authentication</h2>
         
@@ -61,11 +60,11 @@
             <h3>Login</h3>
             <div class="input-group">
                 <label>Email</label>
-                <input type="email" id="login_email" placeholder="Email">
+                <input type="email" id="login_email" placeholder="Email" value="admin@school.edu">
             </div>
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="login_password" placeholder="Password">
+                <input type="password" id="login_password" placeholder="Password" value="password123">
             </div>
             <button onclick="handleLogin()">Login</button>
         </div>
@@ -78,14 +77,12 @@
     </div>
 
     <div id="api-modules" class="hidden">
-        <!-- 0. List All Faculty (GET) -->
         <div class="card">
             <h2><span class="method get">GET</span> /api/faculty</h2>
             <p>View all faculty members.</p>
             <button onclick="testGet('/api/faculty')">View All Faculty</button>
         </div>
 
-        <!-- Student Management (CRUD) -->
         <div class="card" style="border-left-color: #ffc107;">
             <h2 style="color: #ffc107;">Student Management</h2>
             <p>CRUD operations for students.</p>
@@ -105,7 +102,6 @@
             })">Create Student</button>
         </div>
 
-        <!-- Section Management (CRUD) -->
         <div class="card" style="border-left-color: #17a2b8;">
             <h2 style="color: #17a2b8;">Section Management</h2>
             <p>CRUD operations for sections.</p>
@@ -125,7 +121,6 @@
             })">Create Section</button>
         </div>
 
-        <!-- 1. Create Faculty (POST) -->
         <div class="card">
             <h2><span class="method post">POST</span> /api/faculty</h2>
             <p>Create a new faculty record.</p>
@@ -148,7 +143,6 @@
             })">Create Faculty</button>
         </div>
 
-        <!-- 2. Assign Faculty to Section (POST) -->
         <div class="card">
             <h2><span class="method get">GET</span> /api/sections/{id}/faculty</h2>
             <p>View section assignment details.</p>
@@ -173,7 +167,6 @@
             })">Assign Faculty</button>
         </div>
 
-        <!-- 3. View Class List (GET) -->
         <div class="card">
             <h2><span class="method get">GET</span> /api/sections/{id}/classlist</h2>
             <p>View all students in a section.</p>
@@ -184,7 +177,6 @@
             <button onclick="testGet('/api/sections/' + document.getElementById('get_classlist_id').value + '/classlist')">View Classlist</button>
         </div>
 
-        <!-- 4. Upload Grade (POST) -->
         <div class="card">
             <h2><span class="method post">POST</span> /api/grades</h2>
             <p>Upload a student grade.</p>
@@ -207,7 +199,6 @@
             })">Upload Grade</button>
         </div>
 
-        <!-- 5. View Student Grades (GET) -->
         <div class="card">
             <h2><span class="method get">GET</span> /api/grades</h2>
             <p>View all grades uploaded in the system.</p>
@@ -222,7 +213,6 @@
             <button onclick="testGet('/api/grades/' + document.getElementById('get_grades_student_id').value)">View Grades</button>
         </div>
 
-        <!-- 6. Track Attendance (POST) -->
         <div class="card">
             <h2><span class="method post">POST</span> /api/attendance</h2>
             <p>Record student attendance.</p>
@@ -245,7 +235,6 @@
             })">Record Attendance</button>
         </div>
 
-        <!-- 7. View Attendance (GET) -->
         <div class="card">
             <h2><span class="method get">GET</span> /api/attendance/{studentId}</h2>
             <p>View attendance history of a student.</p>
@@ -264,7 +253,6 @@
         const baseUrl = 'http://127.0.0.1:8000';
         let authToken = localStorage.getItem('auth_token');
 
-        // Initialize UI
         updateAuthUI();
 
         function updateAuthUI() {
@@ -362,7 +350,6 @@
             }
         }
 
-        // Wrapper functions for buttons
         function testPost(endpoint, data) { apiCall(endpoint, 'POST', data); }
         function testGet(endpoint) { apiCall(endpoint, 'GET'); }
     </script>

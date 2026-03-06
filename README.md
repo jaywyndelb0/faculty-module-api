@@ -53,9 +53,9 @@ You can test all API routes directly in your browser without Postman:
 
 #### **Staff Authentication (Public)**
 - **Login**: `POST /api/login` (or `/api/faculty/login`)
-  - Body (JSON): `{"email": "admin@example.com", "password": "password123"}`
+  - Body (JSON): `{"email": "admin@school.edu", "password": "password123"}`
 - **Register**: `POST /api/register` (or `/api/faculty/register`)
-  - Body (JSON): `{"name": "Admin", "email": "admin@example.com", "password": "password123", "password_confirmation": "password123"}`
+  - Body (JSON): `{"name": "Admin", "email": "admin@school.edu", "password": "password123", "password_confirmation": "password123"}`
   - *Copy the `access_token` from the response.*
 
 #### **Faculty Management (Protected)**

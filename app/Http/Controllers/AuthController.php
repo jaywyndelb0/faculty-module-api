@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    /**
-     * Register a new staff user.
-     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -40,9 +37,6 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * Login staff user and return token.
-     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -72,9 +66,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Logout user (revoke token).
-     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -84,9 +75,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Get authenticated user details.
-     */
     public function profile(Request $request)
     {
         return response()->json($request->user());
