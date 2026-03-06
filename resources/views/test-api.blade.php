@@ -15,12 +15,18 @@
         input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         button { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         button:hover { background-color: #0056b3; }
+        .btn-delete { background-color: #dc3545; }
+        .btn-delete:hover { background-color: #a71d2a; }
+        .btn-update { background-color: #ffc107; color: #000; }
+        .btn-update:hover { background-color: #e0a800; }
         .logout-btn { background-color: #dc3545; }
         .logout-btn:hover { background-color: #a71d2a; }
         pre { background: #eee; padding: 15px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; font-size: 0.9em; border: 1px solid #ccc; max-height: 300px; }
         .method { font-weight: bold; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; margin-right: 5px; }
         .post { background: #28a745; }
         .get { background: #007bff; }
+        .put { background: #ffc107; color: #000; }
+        .delete { background: #dc3545; }
         .auth-status { text-align: center; margin-bottom: 20px; padding: 10px; border-radius: 4px; font-weight: bold; }
         .status-logged-in { background-color: #d4edda; color: #155724; }
         .status-logged-out { background-color: #f8d7da; color: #721c24; }
@@ -78,146 +84,103 @@
 
     <div id="api-modules" class="hidden">
         <div class="card">
-            <h2><span class="method get">GET</span> /api/faculty</h2>
-            <p>View all faculty members.</p>
-            <button onclick="testGet('/api/faculty')">View All Faculty</button>
-        </div>
-
-        <div class="card" style="border-left-color: #ffc107;">
-            <h2 style="color: #ffc107;">Student Management</h2>
-            <p>CRUD operations for students.</p>
-            <button onclick="testGet('/api/students')">List All Students</button>
+            <h2>Faculty Management</h2>
+            <button onclick="testGet('/api/faculty')">List All Faculty</button>
             <hr>
             <div class="input-group">
-                <label>Student Name</label>
-                <input type="text" id="new_student_name">
+                <label>Faculty ID (for View/Update/Delete/Schedule)</label>
+                <input type="number" id="faculty_id_field" value="1">
             </div>
-            <div class="input-group">
-                <label>Section ID</label>
-                <input type="number" id="new_student_section_id" value="1">
-            </div>
-            <button onclick="testPost('/api/students', {
-                name: document.getElementById('new_student_name').value,
-                section_id: document.getElementById('new_student_section_id').value
-            })">Create Student</button>
-        </div>
-
-        <div class="card" style="border-left-color: #17a2b8;">
-            <h2 style="color: #17a2b8;">Section Management</h2>
-            <p>CRUD operations for sections.</p>
-            <button onclick="testGet('/api/sections')">List All Sections</button>
+            <button onclick="testGet('/api/faculty/' + document.getElementById('faculty_id_field').value)">View Single Faculty</button>
+            <button onclick="testGet('/api/faculty/' + document.getElementById('faculty_id_field').value + '/schedule')">View Faculty Schedule</button>
+            <button onclick="testDelete('/api/faculty/' + document.getElementById('faculty_id_field').value)" class="btn-delete">Delete Faculty</button>
             <hr>
-            <div class="input-group">
-                <label>Section Name</label>
-                <input type="text" id="new_section_name">
-            </div>
-            <div class="input-group">
-                <label>Faculty ID (Optional)</label>
-                <input type="number" id="new_section_faculty_id">
-            </div>
-            <button onclick="testPost('/api/sections', {
-                section_name: document.getElementById('new_section_name').value,
-                faculty_id: document.getElementById('new_section_faculty_id').value
-            })">Create Section</button>
-        </div>
-
-        <div class="card">
-            <h2><span class="method post">POST</span> /api/faculty</h2>
-            <p>Create a new faculty record.</p>
             <div class="input-group">
                 <label>Name</label>
-                <input type="text" id="faculty_name" placeholder="e.g., John Doe">
+                <input type="text" id="faculty_name" placeholder="Name">
             </div>
             <div class="input-group">
                 <label>Email</label>
-                <input type="email" id="faculty_email" placeholder="e.g., john@example.com">
+                <input type="email" id="faculty_email" placeholder="Email">
             </div>
             <div class="input-group">
                 <label>Department</label>
-                <input type="text" id="faculty_dept" placeholder="e.g., Science">
+                <input type="text" id="faculty_dept" placeholder="Department">
             </div>
             <button onclick="testPost('/api/faculty', {
                 name: document.getElementById('faculty_name').value,
                 email: document.getElementById('faculty_email').value,
                 department: document.getElementById('faculty_dept').value
             })">Create Faculty</button>
+            <button onclick="testPut('/api/faculty/' + document.getElementById('faculty_id_field').value, {
+                name: document.getElementById('faculty_name').value,
+                email: document.getElementById('faculty_email').value,
+                department: document.getElementById('faculty_dept').value
+            })" class="btn-update">Update Faculty</button>
         </div>
 
         <div class="card">
-            <h2><span class="method get">GET</span> /api/sections/{id}/faculty</h2>
-            <p>View section assignment details.</p>
+            <h2>Section Assignment</h2>
             <div class="input-group">
                 <label>Section ID</label>
-                <input type="number" id="view_section_id" value="1">
+                <input type="number" id="section_id_field" value="1">
             </div>
-            <button onclick="testGet('/api/sections/' + document.getElementById('view_section_id').value + '/faculty')">View Assignment</button>
+            <button onclick="testGet('/api/sections/' + document.getElementById('section_id_field').value + '/faculty')">View Assignment</button>
+            <button onclick="testGet('/api/sections/' + document.getElementById('section_id_field').value + '/classlist')">View Classlist</button>
+            <button onclick="testDelete('/api/sections/' + document.getElementById('section_id_field').value + '/remove-faculty')" class="btn-delete">Remove Faculty from Section</button>
             <hr>
-            <h2><span class="method post">POST</span> /api/sections/{id}/assign-faculty</h2>
-            <p>Assign a faculty member to a section.</p>
             <div class="input-group">
-                <label>Section ID</label>
-                <input type="number" id="assign_section_id" value="1">
-            </div>
-            <div class="input-group">
-                <label>Faculty ID</label>
+                <label>Faculty ID (to assign)</label>
                 <input type="number" id="assign_faculty_id" value="1">
             </div>
-            <button onclick="testPost('/api/sections/' + document.getElementById('assign_section_id').value + '/assign-faculty', {
+            <button onclick="testPost('/api/sections/' + document.getElementById('section_id_field').value + '/assign-faculty', {
                 faculty_id: document.getElementById('assign_faculty_id').value
-            })">Assign Faculty</button>
+            })">Assign Faculty to Section</button>
         </div>
 
         <div class="card">
-            <h2><span class="method get">GET</span> /api/sections/{id}/classlist</h2>
-            <p>View all students in a section.</p>
+            <h2>Grades Management</h2>
+            <button onclick="testGet('/api/grades')">List All Grades</button>
+            <hr>
             <div class="input-group">
-                <label>Section ID</label>
-                <input type="number" id="get_classlist_id" value="1">
+                <label>Grade Record ID (for Update/Delete)</label>
+                <input type="number" id="grade_id_field" value="1">
             </div>
-            <button onclick="testGet('/api/sections/' + document.getElementById('get_classlist_id').value + '/classlist')">View Classlist</button>
-        </div>
-
-        <div class="card">
-            <h2><span class="method post">POST</span> /api/grades</h2>
-            <p>Upload a student grade.</p>
+            <button onclick="testDelete('/api/grades/' + document.getElementById('grade_id_field').value)" class="btn-delete">Delete Grade Record</button>
+            <hr>
             <div class="input-group">
-                <label>Student ID</label>
+                <label>Student ID (for Create/View)</label>
                 <input type="number" id="grade_student_id" value="1">
             </div>
             <div class="input-group">
                 <label>Subject</label>
-                <input type="text" id="grade_subject" placeholder="e.g., Mathematics">
+                <input type="text" id="grade_subject" placeholder="Subject">
             </div>
             <div class="input-group">
                 <label>Grade</label>
-                <input type="text" id="grade_value" placeholder="e.g., A">
+                <input type="text" id="grade_value" placeholder="Grade">
             </div>
             <button onclick="testPost('/api/grades', {
                 student_id: document.getElementById('grade_student_id').value,
                 subject: document.getElementById('grade_subject').value,
                 grade: document.getElementById('grade_value').value
             })">Upload Grade</button>
+            <button onclick="testPut('/api/grades/' + document.getElementById('grade_id_field').value, {
+                subject: document.getElementById('grade_subject').value,
+                grade: document.getElementById('grade_value').value
+            })" class="btn-update">Update Grade Record</button>
+            <button onclick="testGet('/api/grades/' + document.getElementById('grade_student_id').value)">View Student Grades</button>
         </div>
 
         <div class="card">
-            <h2><span class="method get">GET</span> /api/grades</h2>
-            <p>View all grades uploaded in the system.</p>
-            <button onclick="testGet('/api/grades')">View All Grades</button>
-            <hr>
-            <h2><span class="method get">GET</span> /api/grades/{studentId}</h2>
-            <p>View grades of a specific student.</p>
+            <h2>Attendance Management</h2>
             <div class="input-group">
-                <label>Student ID</label>
-                <input type="number" id="get_grades_student_id" value="1">
+                <label>Attendance Record ID (for Update)</label>
+                <input type="number" id="attendance_id_field" value="1">
             </div>
-            <button onclick="testGet('/api/grades/' + document.getElementById('get_grades_student_id').value)">View Grades</button>
-        </div>
-
-        <div class="card">
-            <h2><span class="method post">POST</span> /api/attendance</h2>
-            <p>Record student attendance.</p>
+            <hr>
             <div class="input-group">
-                <label>Student ID</label>
+                <label>Student ID (for Create/View)</label>
                 <input type="number" id="att_student_id" value="1">
             </div>
             <div class="input-group">
@@ -226,23 +189,18 @@
             </div>
             <div class="input-group">
                 <label>Status</label>
-                <input type="text" id="att_status" placeholder="e.g., present">
+                <input type="text" id="att_status" placeholder="Status">
             </div>
             <button onclick="testPost('/api/attendance', {
                 student_id: document.getElementById('att_student_id').value,
                 date: document.getElementById('att_date').value,
                 status: document.getElementById('att_status').value
             })">Record Attendance</button>
-        </div>
-
-        <div class="card">
-            <h2><span class="method get">GET</span> /api/attendance/{studentId}</h2>
-            <p>View attendance history of a student.</p>
-            <div class="input-group">
-                <label>Student ID</label>
-                <input type="number" id="get_att_student_id" value="1">
-            </div>
-            <button onclick="testGet('/api/attendance/' + document.getElementById('get_att_student_id').value)">View Attendance History</button>
+            <button onclick="testPut('/api/attendance/' + document.getElementById('attendance_id_field').value, {
+                date: document.getElementById('att_date').value,
+                status: document.getElementById('att_status').value
+            })" class="btn-update">Update Attendance Record</button>
+            <button onclick="testGet('/api/attendance/' + document.getElementById('att_student_id').value)">View Student Attendance</button>
         </div>
     </div>
 
@@ -352,6 +310,8 @@
 
         function testPost(endpoint, data) { apiCall(endpoint, 'POST', data); }
         function testGet(endpoint) { apiCall(endpoint, 'GET'); }
+        function testPut(endpoint, data) { apiCall(endpoint, 'PUT', data); }
+        function testDelete(endpoint) { apiCall(endpoint, 'DELETE'); }
     </script>
 </body>
 </html>
