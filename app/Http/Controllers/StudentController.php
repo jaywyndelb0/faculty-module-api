@@ -1,0 +1,127 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
+class StudentController extends Controller
+{
+    /**
+     * List all students
+     * GET /api/students
+     */
+    public function index()
+    {
+        $students = DB::table('students')
+            ->leftJoin('sections', 'students.section_id', '=', 'sections.id')
+            ->select('students.*', 'sections.section_name')
+            ->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Student list retrieved successfully',
+            'data' => $students
+        ], 200);
+    }
+
+    /**
+     * Create a new student
+     * POST /api/students
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:100',
+            'section_id' => 'required|integer|exists:sections,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $id = DB::table('students')->insertGetId([
+            'name' => $request->name,
+            'section_id' => $request->section_id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'status' => 201,
+            'message' => 'Student created successfully',
+            'data' => ['id' => $id, 'name' => $request->name]
+        ], 201);
+    }
+
+    /**
+     * View specific student
+     * GET /api/students/{id}
+     */
+    public function show($id)
+    {
+        $student = DB::table('students')
+            ->leftJoin('sections', 'students.section_id', '=', 'sections.id')
+            ->where('students.id', $id)
+            ->select('students.*', 'sections.section_name')
+            ->first();
+
+        if (!$student) {
+            return response()->json(['status' => 404, 'message' => 'Student not found'], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Student details retrieved successfully',
+            'data' => $student
+        ], 200);
+    }
+
+    /**
+     * Update student
+     * PUT /api/students/{id}
+     */
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|required|string|max:100',
+            'section_id' => 'sometimes|required|integer|exists:sections,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $affected = DB::table('students')
+            ->where('id', $id)
+            ->update(array_merge($request->only(['name', 'section_id']), ['updated_at' => now()]));
+
+        if ($affected === 0) {
+            return response()->json(['status' => 404, 'message' => 'Student not found or no changes made'], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Student updated successfully'
+        ], 200);
+    }
+
+    /**
+     * Delete student
+     * DELETE /api/students/{id}
+     */
+    public function destroy($id)
+    {
+        $affected = DB::table('students')->where('id', $id)->delete();
+
+        if ($affected === 0) {
+            return response()->json(['status' => 404, 'message' => 'Student not found'], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Student deleted successfully'
+        ], 200);
+    }
+}
